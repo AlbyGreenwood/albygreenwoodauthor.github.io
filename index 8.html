@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Alby Greenwood — Children's Book Author</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Lora:ital,wght@0,400;0,500;1,400&family=Nunito:wght@300;400;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --forest:     #1a3a2a;
+      --deep:       #0f2318;
+      --canopy:     #2d5a3d;
+      --leaf:       #4a7c5f;
+      --sage:       #7aab8a;
+      --mist:       #b8d4c0;
+      --parchment:  #f5f0e8;
+      --cream:      #faf7f2;
+      --gold:       #c8a84b;
+      --gold-light: #e8c96a;
+      --ink:        #1c2a1e;
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Lora', Georgia, serif; background: var(--cream); color: var(--ink); overflow-x: hidden; }
+
+    /* Nav */
+    nav { position:fixed; top:0; left:0; right:0; z-index:200; padding:1.2rem 3rem; display:flex; justify-content:space-between; align-items:center; transition:background 0.4s; }
+    nav.scrolled { background:rgba(15,35,24,0.93); backdrop-filter:blur(14px); }
+    .nav-logo { font-family:'Playfair Display',serif; font-style:italic; font-size:1.3rem; color:var(--gold-light); text-decoration:none; }
+    .nav-links { display:flex; gap:2.5rem; list-style:none; }
+    .nav-links a { font-family:'Nunito',sans-serif; font-size:0.8rem; font-weight:600; letter-spacing:0.12em; text-transform:uppercase; color:var(--mist); text-decoration:none; transition:color 0.3s; }
+    .nav-links a:hover { color:var(--gold-light); }
+
+    /* Hero */
+    #hero { min-height:100vh; background:var(--deep); position:relative; display:flex; align-items:center; justify-content:center; overflow:hidden; }
+    .light-rays { position:absolute; inset:0; pointer-events:none; overflow:hidden; }
+    .ray { position:absolute; top:-10%; width:2px; height:130%; background:linear-gradient(to bottom,rgba(200,168,75,0.17) 0%,transparent 75%); transform-origin:top center; animation:rayPulse ease-in-out infinite alternate; }
+    @keyframes rayPulse { from{opacity:0.3} to{opacity:0.85} }
+    .canopy-top { position:absolute; top:0; left:0; right:0; height:200px; pointer-events:none; overflow:hidden; }
+    .falling-leaf { position:fixed; pointer-events:none; z-index:5; animation:leafFall linear infinite; opacity:0; }
+    @keyframes leafFall {
+      0%   { transform:translateY(-80px) translateX(0) rotate(0deg); opacity:0; }
+      8%   { opacity:0.75; }
+      92%  { opacity:0.4; }
+      100% { transform:translateY(110vh) translateX(var(--drift)) rotate(var(--spin)); opacity:0; }
+    }
+    .forest-layer { position:absolute; bottom:0; left:0; right:0; pointer-events:none; }
+    .forest-layer svg { display:block; width:100%; }
+    .layer-back  { opacity:0.25; }
+    .layer-mid   { opacity:0.45; }
+    .layer-front { opacity:0.85; }
+    .firefly { position:absolute; border-radius:50%; background:var(--gold-light); box-shadow:0 0 6px 2px rgba(232,201,106,0.7); pointer-events:none; animation:fireflyFloat linear infinite; }
+    @keyframes fireflyFloat {
+      0%  { opacity:0; transform:translate(0,0); }
+      20% { opacity:1; }
+      50% { opacity:0.3; }
+      80% { opacity:0.9; }
+      100%{ opacity:0; transform:translate(var(--fx),var(--fy)); }
+    }
+    #hero-beetle { position:absolute; bottom:78px; left:-120px; z-index:20; width:58px; animation:beetleWalk 13s linear 1s forwards; cursor:pointer; }
+    #hero-beetle:hover { animation-play-state:paused; }
+    @keyframes beetleWalk { 0%{left:-120px} 100%{left:calc(100% + 120px)} }
+    .beetle-body { animation:legWiggle 0.28s ease-in-out infinite alternate; transform-origin:center bottom; }
+    @keyframes legWiggle { from{transform:skewX(-2deg)} to{transform:skewX(2deg)} }
+    .hero-content { position:relative; z-index:10; text-align:center; padding:2rem; }
+    .hero-eyebrow { font-family:'Nunito',sans-serif; font-size:0.75rem; font-weight:600; letter-spacing:0.22em; text-transform:uppercase; color:var(--gold); margin-bottom:1.2rem; }
+    .hero-title { font-family:'Playfair Display',serif; font-size:clamp(3.5rem,8vw,7rem); font-weight:700; line-height:1.05; color:var(--cream); }
+    .hero-title em { font-style:italic; color:var(--gold-light); display:block; }
+    .hero-tagline { font-family:'Lora',serif; font-style:italic; font-size:clamp(1rem,2.2vw,1.28rem); color:var(--mist); margin-top:1.5rem; max-width:520px; margin-left:auto; margin-right:auto; line-height:1.75; }
+    .hero-location { margin-top:1rem; font-family:'Nunito',sans-serif; font-size:0.73rem; letter-spacing:0.18em; text-transform:uppercase; color:var(--sage); }
+    .hero-scroll { margin-top:2.5rem; display:flex; flex-direction:column; align-items:center; gap:0.5rem; }
+    .hero-scroll span { font-family:'Nunito',sans-serif; font-size:0.7rem; letter-spacing:0.18em; text-transform:uppercase; color:var(--sage); }
+    .scroll-line { width:1px; height:48px; background:linear-gradient(to bottom,var(--gold),transparent); animation:scrollPulse 2s ease-in-out infinite; }
+    @keyframes scrollPulse { 0%,100%{opacity:0.4} 50%{opacity:1} }
+
+    /* Sections */
+    section { position:relative; }
+    .section-inner { max-width:920px; margin:0 auto; padding:6rem 2rem; }
+    .section-label { font-family:'Nunito',sans-serif; font-size:0.72rem; font-weight:600; letter-spacing:0.2em; text-transform:uppercase; color:var(--sage); margin-bottom:0.8rem; display:flex; align-items:center; gap:0.8rem; }
+    .section-label::after { content:''; flex:1; max-width:60px; height:1px; background:var(--sage); opacity:0.4; }
+    .section-title { font-family:'Playfair Display',serif; font-size:clamp(2rem,4vw,3rem); font-weight:700; line-height:1.2; color:var(--forest); margin-bottom:1.5rem; }
+    .section-title em { font-style:italic; color:var(--canopy); }
+    .reveal { opacity:0; transform:translateY(28px); transition:opacity 0.9s ease,transform 0.9s ease; }
+    .reveal.visible { opacity:1; transform:translateY(0); }
+    .band { height:100px; position:relative; overflow:hidden; }
+    .band-light   { background:linear-gradient(to bottom,var(--deep) 0%,var(--parchment) 100%); }
+    .band-back    { background:linear-gradient(to bottom,var(--parchment) 0%,var(--forest) 100%); }
+    .band-news    { background:linear-gradient(to bottom,var(--forest) 0%,var(--cream) 100%); }
+    .band-contact { background:linear-gradient(to bottom,var(--cream) 0%,var(--deep) 100%); }
+    .band-beetle-wrap { position:relative; height:28px; overflow:visible; background:var(--parchment); }
+    .band-beetle { position:absolute; top:-16px; width:36px; animation:bandBeetleWalk 15s linear infinite; cursor:pointer; z-index:10; }
+    @keyframes bandBeetleWalk { 0%{left:-80px} 100%{left:calc(100% + 80px)} }
+
+    /* About */
+    #about { background:var(--parchment); }
+    .about-grid { display:grid; grid-template-columns:1fr 1.7fr; gap:5rem; align-items:start; }
+    .about-photo-frame { position:relative; }
+    .photo-leaf-frame { width:100%; aspect-ratio:3/4; border-radius:60% 40% 55% 45% / 50% 50% 50% 50%; overflow:hidden; background:linear-gradient(135deg,var(--canopy),var(--forest)); box-shadow:0 20px 60px rgba(26,58,42,0.25); }
+    .photo-placeholder { width:100%; height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:1rem; color:var(--mist); }
+    .photo-placeholder p { font-family:'Nunito',sans-serif; font-size:0.72rem; letter-spacing:0.1em; text-transform:uppercase; opacity:0.5; text-align:center; padding:0 1rem; }
+    .leaf-deco { position:absolute; pointer-events:none; }
+    .leaf-deco-1 { top:-18px; right:-22px; width:62px; transform:rotate(30deg); opacity:0.55; }
+    .leaf-deco-2 { bottom:-12px; left:-18px; width:48px; transform:rotate(-20deg); opacity:0.45; }
+    .about-text p { font-size:1.05rem; line-height:1.95; color:#2a3d2e; margin-bottom:1.1rem; }
+    .about-text p:first-of-type::first-letter { font-family:'Playfair Display',serif; font-size:3.5rem; font-weight:700; float:left; line-height:0.75; margin-right:0.08em; margin-top:0.12em; color:var(--canopy); }
+    .about-sig { margin-top:2rem; font-family:'Playfair Display',serif; font-style:italic; font-size:1.5rem; color:var(--canopy); }
+
+    /* Pull Quote */
+    .pull-quote-section { background:var(--forest); padding:5rem 2rem; text-align:center; position:relative; overflow:hidden; }
+    .pull-quote-section::before { content:''; position:absolute; inset:0; background:radial-gradient(ellipse at center,rgba(74,124,95,0.28) 0%,transparent 70%); }
+    .pull-quote { position:relative; z-index:2; max-width:700px; margin:0 auto; }
+    .pull-quote-mark { font-family:'Playfair Display',serif; font-size:8rem; line-height:0.5; color:var(--gold); opacity:0.22; display:block; margin-bottom:1rem; }
+    .pull-quote blockquote { font-family:'Playfair Display',serif; font-style:italic; font-size:clamp(1.25rem,3vw,1.85rem); color:var(--cream); line-height:1.65; margin-bottom:1.5rem; }
+    .pull-quote cite { font-family:'Nunito',sans-serif; font-size:0.73rem; letter-spacing:0.18em; text-transform:uppercase; color:var(--gold); font-style:normal; }
+
+    /* Books */
+    #books { background:var(--forest); color:var(--cream); }
+    #books .section-label { color:var(--gold); }
+    #books .section-title { color:var(--cream); }
+    #books .section-title em { color:var(--gold-light); }
+    .books-intro { font-size:1rem; line-height:1.8; color:var(--mist); margin-bottom:3.5rem; max-width:580px; }
+    .books-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:2rem; }
+    .book-card { background:rgba(255,255,255,0.04); border:1px solid rgba(200,168,75,0.18); border-radius:4px; padding:2.2rem; position:relative; overflow:hidden; transition:transform 0.4s,box-shadow 0.4s,border-color 0.4s; }
+    .book-card::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; background:linear-gradient(to right,var(--gold),var(--gold-light),var(--gold)); transform:scaleX(0); transition:transform 0.4s; }
+    .book-card:hover { transform:translateY(-5px); box-shadow:0 18px 45px rgba(0,0,0,0.4); border-color:rgba(200,168,75,0.35); }
+    .book-card:hover::before { transform:scaleX(1); }
+    .book-number { font-family:'Playfair Display',serif; font-size:3.5rem; font-weight:700; color:rgba(200,168,75,0.1); line-height:1; margin-bottom:0.4rem; }
+    .book-tag { display:inline-block; font-family:'Nunito',sans-serif; font-size:0.66rem; font-weight:600; letter-spacing:0.14em; text-transform:uppercase; color:var(--gold); border:1px solid rgba(200,168,75,0.35); padding:0.22rem 0.7rem; border-radius:2px; margin-bottom:1rem; }
+    .book-title { font-family:'Playfair Display',serif; font-size:1.5rem; font-weight:700; font-style:italic; color:var(--cream); margin-bottom:0.9rem; line-height:1.2; }
+    .book-desc { font-size:0.93rem; line-height:1.8; color:var(--mist); }
+    .book-detail { margin-top:1.3rem; padding-top:1.3rem; border-top:1px solid rgba(255,255,255,0.07); font-family:'Nunito',sans-serif; font-size:0.75rem; color:var(--sage); }
+
+    /* Bookshelf */
+    #shelf { background:var(--cream); }
+    .shelf-intro { font-size:1rem; line-height:1.8; color:#4a5a4e; margin-bottom:3rem; max-width:560px; }
+    .bookshelf { position:relative; padding:0 0 1.5rem; }
+    .shelf-plank { position:absolute; bottom:0; left:-12px; right:-12px; height:18px; background:linear-gradient(to bottom,#8b6340,#6b4a28); border-radius:3px; box-shadow:0 4px 12px rgba(0,0,0,0.2); }
+    .shelf-plank::before { content:''; position:absolute; top:0; left:0; right:0; height:4px; background:rgba(255,255,255,0.15); border-radius:3px 3px 0 0; }
+    .shelf-books { display:flex; gap:0.5rem; align-items:flex-end; padding-bottom:0.5rem; flex-wrap:wrap; }
+    .shelf-book { display:flex; flex-direction:column; align-items:center; justify-content:flex-end; padding:1rem 0.55rem 0.8rem; border-radius:3px 3px 0 0; cursor:default; transition:transform 0.3s; min-width:48px; text-align:center; }
+    .shelf-book:hover { transform:translateY(-9px); }
+    .shelf-book-title { font-family:'Lora',serif; font-size:0.58rem; font-style:italic; color:rgba(255,255,255,0.85); writing-mode:vertical-rl; text-orientation:mixed; transform:rotate(180deg); line-height:1.2; max-height:95px; overflow:hidden; }
+    .shelf-book-author { font-family:'Nunito',sans-serif; font-size:0.5rem; color:rgba(255,255,255,0.5); writing-mode:vertical-rl; transform:rotate(180deg); margin-top:0.35rem; }
+    .shelf-note { margin-top:2rem; font-family:'Lora',serif; font-style:italic; font-size:0.9rem; color:var(--leaf); }
+
+    /* News */
+    #news { background:var(--cream); }
+    .news-list { display:flex; flex-direction:column; }
+    .news-item { display:grid; grid-template-columns:110px 1fr; gap:2rem; padding:1.8rem 0; border-bottom:1px solid rgba(74,124,95,0.12); align-items:start; }
+    .news-item:first-child { border-top:1px solid rgba(74,124,95,0.12); }
+    .news-date { font-family:'Nunito',sans-serif; font-size:0.72rem; font-weight:600; letter-spacing:0.08em; color:var(--sage); text-transform:uppercase; padding-top:0.2rem; }
+    .news-content h3 { font-family:'Playfair Display',serif; font-size:1.1rem; color:var(--forest); margin-bottom:0.4rem; }
+    .news-content p { font-size:0.93rem; line-height:1.7; color:#4a5a4e; }
+    .news-badge { display:inline-block; font-family:'Nunito',sans-serif; font-size:0.63rem; font-weight:600; letter-spacing:0.12em; text-transform:uppercase; background:var(--canopy); color:var(--cream); padding:0.18rem 0.55rem; border-radius:2px; margin-bottom:0.5rem; }
+
+    /* Contact */
+    #contact { background:var(--deep); color:var(--cream); text-align:center; }
+    #contact .section-inner { padding:7rem 2rem; }
+    #contact .section-label { color:var(--gold); justify-content:center; }
+    #contact .section-label::after { display:none; }
+    #contact .section-title { color:var(--cream); }
+    .contact-text { font-size:1.05rem; line-height:1.8; color:var(--mist); max-width:480px; margin:0 auto 2.5rem; }
+    .contact-email { display:inline-block; font-family:'Playfair Display',serif; font-style:italic; font-size:1.25rem; color:var(--gold-light); text-decoration:none; border-bottom:1px solid rgba(232,201,106,0.3); padding-bottom:0.2rem; transition:color 0.3s,border-color 0.3s; }
+    .contact-email:hover { color:var(--cream); border-color:var(--cream); }
+    .contact-divider { width:50px; height:1px; background:rgba(200,168,75,0.25); margin:2.5rem auto; }
+    .contact-note { font-family:'Nunito',sans-serif; font-size:0.78rem; letter-spacing:0.1em; color:var(--leaf); }
+    .contact-beetle-wrap { margin:2.5rem auto 0; width:90px; position:relative; }
+    .contact-leaf-svg { width:90px; opacity:0.55; }
+    .contact-beetle-svg { position:absolute; top:-22px; left:50%; transform:translateX(-50%); width:38px; animation:beetleWiggle 3.5s ease-in-out infinite; }
+    @keyframes beetleWiggle { 0%,100%{transform:translateX(-50%) rotate(-4deg)} 50%{transform:translateX(-50%) rotate(4deg)} }
+
+    /* Footer */
+    footer { background:var(--deep); border-top:1px solid rgba(255,255,255,0.04); padding:1.5rem 3rem; display:flex; justify-content:space-between; align-items:center; }
+    footer p { font-family:'Nunito',sans-serif; font-size:0.72rem; color:var(--leaf); }
+    .footer-logo { font-family:'Playfair Display',serif; font-style:italic; font-size:1rem; color:var(--gold); }
+
+    @media(max-width:768px){
+      nav{padding:1rem 1.5rem;} .nav-links{gap:1.2rem;}
+      .about-grid{grid-template-columns:1fr;gap:2.5rem;}
+      .photo-leaf-frame{max-width:230px;margin:0 auto;}
+      .section-inner{padding:4rem 1.5rem;}
+      footer{flex-direction:column;gap:0.5rem;text-align:center;padding:1.5rem;}
+      .news-item{grid-template-columns:1fr;gap:0.3rem;}
+    }
+    @media(max-width:480px){ .nav-links{display:none;} }
+  </style>
+</head>
+<body>
+
+<div id="leaves-container" style="position:fixed;inset:0;pointer-events:none;z-index:6;overflow:hidden;"></div>
+
+<!-- Nav -->
+<nav id="nav">
+  <a href="#hero" class="nav-logo">Alby Greenwood</a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#books">Books</a></li>
+    <li><a href="#shelf">Bookshelf</a></li>
+    <li><a href="#news">News</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- Hero -->
+<section id="hero">
+  <div class="light-rays" id="rays"></div>
+  <div class="canopy-top">
+    <svg viewBox="0 0 1440 200" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+      <path d="M0,0 Q120,165 240,72 Q360,0 480,115 Q600,195 720,52 Q840,0 960,132 Q1080,214 1200,72 Q1320,0 1440,92 L1440,0 Z" fill="#0f2318" opacity="0.95"/>
+      <path d="M0,0 Q100,112 200,36 Q320,0 440,92 Q560,172 680,36 Q800,0 920,112 Q1040,192 1160,46 Q1280,0 1440,72 L1440,0 Z" fill="#1a3a2a" opacity="0.7"/>
+    </svg>
+  </div>
+  <div id="fireflies"></div>
+  <div class="forest-layer layer-back">
+    <svg viewBox="0 0 1440 300" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+      <path d="M0,300 L0,182 Q30,142 62,162 Q94,182 122,112 Q150,52 182,92 Q214,132 252,72 Q290,12 322,62 Q354,112 392,82 Q430,52 462,102 Q494,152 532,102 Q570,52 602,92 Q634,132 662,72 Q690,12 732,62 Q774,112 802,82 Q830,52 872,102 Q914,152 942,112 Q970,72 1012,122 Q1054,172 1082,132 Q1110,92 1152,142 Q1194,192 1222,152 Q1250,112 1292,162 Q1334,212 1372,172 L1440,182 L1440,300 Z" fill="#2d5a3d"/>
+    </svg>
+  </div>
+  <div class="forest-layer layer-mid">
+    <svg viewBox="0 0 1440 300" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+      <path d="M0,300 L0,222 Q52,182 92,202 Q132,222 167,157 Q202,92 242,137 Q282,182 312,132 Q342,82 382,122 Q422,162 452,112 Q482,62 522,107 Q562,152 592,102 Q622,52 662,102 Q702,152 732,112 Q762,72 802,122 Q842,172 872,132 Q902,92 942,142 Q982,192 1012,157 Q1042,122 1082,167 Q1122,212 1152,177 Q1182,142 1222,187 Q1262,232 1302,197 Q1342,162 1392,207 L1440,217 L1440,300 Z" fill="#1a3a2a"/>
+    </svg>
+  </div>
+  <div class="forest-layer layer-front">
+    <svg viewBox="0 0 1440 300" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+      <path d="M0,300 L0,267 Q42,237 77,257 Q112,277 142,237 Q172,197 207,227 Q242,257 272,217 Q302,177 342,207 Q382,237 412,207 Q442,177 480,212 Q518,247 550,220 Q582,193 620,230 Q658,267 690,244 Q722,221 760,254 Q798,287 830,264 Q862,241 900,267 Q938,293 970,272 Q1002,251 1040,274 Q1078,297 1110,280 Q1142,263 1180,280 Q1218,297 1260,282 Q1302,267 1344,280 L1440,270 L1440,300 Z" fill="#0f2318"/>
+    </svg>
+  </div>
+
+  <div id="hero-beetle" title="Hello there!">
+    <svg class="beetle-body" viewBox="0 0 100 80" xmlns="http://www.w3.org/2000/svg">
+      <ellipse cx="50" cy="50" rx="20" ry="25" fill="#2d5a3d"/>
+      <ellipse cx="50" cy="50" rx="14" ry="18" fill="#1a3a2a"/>
+      <line x1="50" y1="30" x2="50" y2="75" stroke="#4a7c5f" stroke-width="1.2" opacity="0.5"/>
+      <ellipse cx="50" cy="30" rx="13" ry="9" fill="#2d5a3d"/>
+      <circle cx="44" cy="26" r="3.2" fill="#1a3a2a"/><circle cx="56" cy="26" r="3.2" fill="#1a3a2a"/>
+      <circle cx="44" cy="26" r="1.4" fill="#c8a84b"/><circle cx="56" cy="26" r="1.4" fill="#c8a84b"/>
+      <line x1="44" y1="23" x2="34" y2="11" stroke="#7aab8a" stroke-width="1" stroke-linecap="round"/>
+      <line x1="56" y1="23" x2="66" y2="11" stroke="#7aab8a" stroke-width="1" stroke-linecap="round"/>
+      <line x1="32" y1="38" x2="14" y2="30" stroke="#4a7c5f" stroke-width="1.5" stroke-linecap="round"/>
+      <line x1="32" y1="48" x2="14" y2="48" stroke="#4a7c5f" stroke-width="1.5" stroke-linecap="round"/>
+      <line x1="32" y1="58" x2="16" y2="65" stroke="#4a7c5f" stroke-width="1.5" stroke-linecap="round"/>
+      <line x1="68" y1="38" x2="86" y2="30" stroke="#4a7c5f" stroke-width="1.5" stroke-linecap="round"/>
+      <line x1="68" y1="48" x2="86" y2="48" stroke="#4a7c5f" stroke-width="1.5" stroke-linecap="round"/>
+      <line x1="68" y1="58" x2="84" y2="65" stroke="#4a7c5f" stroke-width="1.5" stroke-linecap="round"/>
+    </svg>
+  </div>
+
+  <div class="hero-content">
+    <p class="hero-eyebrow">Children's Book Author</p>
+    <h1 class="hero-title">Alby<em>Greenwood</em></h1>
+    <p class="hero-tagline">Stories that make you look twice at the world around you —<br/>and the small, magnificent creatures within it.</p>
+    <p class="hero-location">&#10022; &nbsp; Dispatches from the edge of the world &middot; Tasmania, Australia &nbsp; &#10022;</p>
+    <div class="hero-scroll">
+      <div class="scroll-line"></div>
+      <span>Enter the Greenwood</span>
+    </div>
+  </div>
+</section>
+
+<div class="band band-light"></div>
+<div class="band-beetle-wrap">
+  <svg class="band-beetle" viewBox="0 0 100 80" xmlns="http://www.w3.org/2000/svg" style="animation-delay:-7s">
+    <ellipse cx="50" cy="50" rx="20" ry="25" fill="#4a7c5f"/>
+    <ellipse cx="50" cy="50" rx="14" ry="18" fill="#2d5a3d"/>
+    <ellipse cx="50" cy="30" rx="13" ry="9" fill="#4a7c5f"/>
+    <circle cx="44" cy="26" r="3.2" fill="#2d5a3d"/><circle cx="56" cy="26" r="3.2" fill="#2d5a3d"/>
+    <circle cx="44" cy="26" r="1.4" fill="#c8a84b"/><circle cx="56" cy="26" r="1.4" fill="#c8a84b"/>
+    <line x1="44" y1="23" x2="34" y2="11" stroke="#7aab8a" stroke-width="1" stroke-linecap="round"/>
+    <line x1="56" y1="23" x2="66" y2="11" stroke="#7aab8a" stroke-width="1" stroke-linecap="round"/>
+    <line x1="32" y1="38" x2="14" y2="30" stroke="#7aab8a" stroke-width="1.3" stroke-linecap="round"/>
+    <line x1="32" y1="48" x2="14" y2="48" stroke="#7aab8a" stroke-width="1.3" stroke-linecap="round"/>
+    <line x1="32" y1="58" x2="16" y2="65" stroke="#7aab8a" stroke-width="1.3" stroke-linecap="round"/>
+    <line x1="68" y1="38" x2="86" y2="30" stroke="#7aab8a" stroke-width="1.3" stroke-linecap="round"/>
+    <line x1="68" y1="48" x2="86" y2="48" stroke="#7aab8a" stroke-width="1.3" stroke-linecap="round"/>
+    <line x1="68" y1="58" x2="84" y2="65" stroke="#7aab8a" stroke-width="1.3" stroke-linecap="round"/>
+  </svg>
+</div>
+
+<!-- About -->
+<section id="about">
+  <div class="section-inner">
+    <div class="about-grid">
+      <div class="about-photo-frame reveal">
+        <div class="photo-leaf-frame">
+          <div class="photo-placeholder">
+            <svg width="55" height="55" viewBox="0 0 60 60" fill="none">
+              <circle cx="30" cy="22" r="12" stroke="#b8d4c0" stroke-width="1.5"/>
+              <path d="M8,55 Q8,38 30,38 Q52,38 52,55" stroke="#b8d4c0" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+            </svg>
+            <p>Your photo<br/>comes here</p>
+          </div>
+        </div>
+        <svg class="leaf-deco leaf-deco-1" viewBox="0 0 80 120" xmlns="http://www.w3.org/2000/svg">
+          <path d="M40,10 Q70,30 65,70 Q60,110 40,115 Q20,110 15,70 Q10,30 40,10 Z" fill="#4a7c5f" opacity="0.6"/>
+          <line x1="40" y1="10" x2="40" y2="115" stroke="#2d5a3d" stroke-width="1" opacity="0.35"/>
+        </svg>
+        <svg class="leaf-deco leaf-deco-2" viewBox="0 0 80 120" xmlns="http://www.w3.org/2000/svg">
+          <path d="M40,10 Q70,30 65,70 Q60,110 40,115 Q20,110 15,70 Q10,30 40,10 Z" fill="#7aab8a" opacity="0.5"/>
+          <line x1="40" y1="10" x2="40" y2="115" stroke="#4a7c5f" stroke-width="1" opacity="0.3"/>
+        </svg>
+      </div>
+      <div class="about-text reveal" style="transition-delay:0.2s">
+        <p class="section-label">About Alby</p>
+        <h2 class="section-title">Welcome to <em>the Greenwood</em></h2>
+        <p>I've always believed that the best stories find you when you least expect them — usually hiding under a leaf, or curled inside a particularly interesting creature.</p>
+        <p>For three decades I built a career helping families plan their futures — but all the while, I was scribbling poems on notepads and spinning tales for my two boys that were definitely more entertaining than they needed to be.</p>
+        <p>Inspired by the wild beauty of Tasmania, a lifelong love of rhyme, and a childhood spent with Dr Seuss, I write picture books that celebrate the small, overlooked wonders of the natural world.</p>
+        <p>I live on the edge of a great adventure — quite literally — and I believe every child deserves a story that makes them look twice at the world around them.</p>
+        <div class="about-sig">— Alby x</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Pull Quote -->
+<div class="pull-quote-section reveal">
+  <div class="pull-quote">
+    <span class="pull-quote-mark">"</span>
+    <blockquote>For the first time in his life,<br/>he had absolutely nothing left to say.</blockquote>
+    <cite>— from The Most Marvellous Beetle by Alby Greenwood</cite>
+  </div>
+</div>
+
+<!-- Books -->
+<section id="books">
+  <div class="section-inner">
+    <p class="section-label reveal">The Books</p>
+    <h2 class="section-title reveal" style="transition-delay:0.1s">Stories from <em>the Greenwood</em></h2>
+    <p class="books-intro reveal" style="transition-delay:0.2s">Picture books that ask children — and the grown-ups beside them — to pause, wonder, and look a little more closely at the extraordinary world hiding in plain sight.</p>
+    <div class="books-grid">
+      <div class="book-card reveal" style="transition-delay:0.3s">
+        <div class="book-number">01</div>
+        <span class="book-tag">Manuscript &middot; In Submission</span>
+        <h3 class="book-title">The Most Marvellous Beetle</h3>
+        <p class="book-desc">Jimmy knows everything about beetles. Everything. His teacher, his family, and just about everyone at school knows this too — whether they want to or not. But when Jimmy spots something extraordinary on a bush in the school yard — a Miena Jewel Beetle, one of the rarest creatures on the planet — suddenly the boy everyone tried to escape becomes the hero nobody expected. A joyful, funny picture book about the superpower of knowing one thing really, really well, and the magnificent moment the world finally catches up with you.</p>
+        <div class="book-detail">Picture Book &middot; Ages 3–7 &middot; EK Books "Your Marvellous Mind" Competition</div>
+      </div>
+      <div class="book-card reveal" style="transition-delay:0.4s">
+        <div class="book-number">02</div>
+        <span class="book-tag">Manuscript &middot; In Discussion</span>
+        <h3 class="book-title">The Rock Face</h3>
+        <p class="book-desc">A boy arrives in a new country carrying nothing but a backpack and a longing to belong. When he discovers rock climbing, he finds more than just a sport — he finds a language that everyone speaks, and a place where he finally feels at home.</p>
+        <div class="book-detail">Picture Book &middot; Ages 4–8 &middot; Themes of belonging &amp; resilience</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="band band-news"></div>
+
+<!-- Bookshelf -->
+<section id="shelf">
+  <div class="section-inner">
+    <p class="section-label reveal">Alby's Shelves</p>
+    <h2 class="section-title reveal" style="transition-delay:0.1s">What fills <em>the Greenwood</em></h2>
+    <p class="shelf-intro reveal" style="transition-delay:0.2s">Every author is shaped by the stories they loved first. These are the picture books that live on Alby's shelves, dog-eared and treasured — the ones that proved a few words and the right illustration can change how a child sees the world.</p>
+    <div class="bookshelf reveal" style="transition-delay:0.3s">
+      <div class="shelf-books" id="shelf-books"></div>
+      <div class="shelf-plank"></div>
+    </div>
+    <p class="shelf-note reveal" style="transition-delay:0.5s">"A picture book is the first theatre a child ever sits in." — Mem Fox</p>
+  </div>
+</section>
+
+<!-- News -->
+<section id="news">
+  <div class="section-inner">
+    <p class="section-label reveal">From the Greenwood</p>
+    <h2 class="section-title reveal" style="transition-delay:0.1s">Latest <em>News</em></h2>
+    <div class="news-list">
+      <div class="news-item reveal" style="transition-delay:0.2s">
+        <div class="news-date">2025</div>
+        <div class="news-content">
+          <span class="news-badge">Competition Entry</span>
+          <h3>The Most Marvellous Beetle — EK Books</h3>
+          <p>Jimmy has been submitted to EK Books' "Your Marvellous Mind" competition. Fingers crossed for this very particular, very marvellous little story.</p>
+        </div>
+      </div>
+      <div class="news-item reveal" style="transition-delay:0.3s">
+        <div class="news-date">2025</div>
+        <div class="news-content">
+          <span class="news-badge">In Discussion</span>
+          <h3>The Rock Face — Publisher Conversations</h3>
+          <p>Exciting early conversations are underway with publishers about The Rock Face. A story about belonging that feels more important than ever.</p>
+        </div>
+      </div>
+      <div class="news-item reveal" style="transition-delay:0.4s">
+        <div class="news-date">2025</div>
+        <div class="news-content">
+          <span class="news-badge">Welcome</span>
+          <h3>Alby Greenwood enters the Greenwood</h3>
+          <p>Welcome to Alby's corner of the internet — a place for stories, creatures, and the kind of wonder that hides under leaves. More to come.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="band band-contact"></div>
+
+<!-- Contact -->
+<section id="contact">
+  <div class="section-inner">
+    <p class="section-label reveal">Find Alby</p>
+    <h2 class="section-title reveal" style="transition-delay:0.1s">Say <em>Hello</em></h2>
+    <p class="contact-text reveal" style="transition-delay:0.2s">Whether you're a publisher, educator, fellow book lover, or simply someone who once befriended a beetle — Alby would love to hear from you.</p>
+    <div class="reveal" style="transition-delay:0.3s">
+      <a href="mailto:albygreenwoodauthor@gmail.com" class="contact-email">albygreenwoodauthor@gmail.com</a>
+    </div>
+    <div class="contact-divider"></div>
+    <p class="contact-note reveal" style="transition-delay:0.4s">Based in Tasmania, Australia &middot; Available for school visits &amp; events</p>
+    <div class="contact-beetle-wrap reveal" style="transition-delay:0.5s">
+      <svg class="contact-leaf-svg" viewBox="0 0 120 58" xmlns="http://www.w3.org/2000/svg">
+        <path d="M10,50 Q30,8 60,6 Q90,4 110,50 Q90,56 60,57 Q30,58 10,50 Z" fill="#2d5a3d" opacity="0.45"/>
+        <line x1="60" y1="6" x2="60" y2="57" stroke="#4a7c5f" stroke-width="1" opacity="0.35"/>
+      </svg>
+      <svg class="contact-beetle-svg" viewBox="0 0 100 80" xmlns="http://www.w3.org/2000/svg">
+        <ellipse cx="50" cy="50" rx="18" ry="22" fill="#4a7c5f"/>
+        <ellipse cx="50" cy="50" rx="12" ry="16" fill="#2d5a3d"/>
+        <ellipse cx="50" cy="32" rx="11" ry="8" fill="#4a7c5f"/>
+        <circle cx="44" cy="28" r="2.5" fill="#2d5a3d"/><circle cx="56" cy="28" r="2.5" fill="#2d5a3d"/>
+        <circle cx="44" cy="28" r="1.1" fill="#c8a84b"/><circle cx="56" cy="28" r="1.1" fill="#c8a84b"/>
+        <line x1="44" y1="25" x2="36" y2="14" stroke="#7aab8a" stroke-width="0.8" stroke-linecap="round"/>
+        <line x1="56" y1="25" x2="64" y2="14" stroke="#7aab8a" stroke-width="0.8" stroke-linecap="round"/>
+        <line x1="34" y1="40" x2="19" y2="33" stroke="#7aab8a" stroke-width="1.2" stroke-linecap="round"/>
+        <line x1="34" y1="50" x2="19" y2="50" stroke="#7aab8a" stroke-width="1.2" stroke-linecap="round"/>
+        <line x1="66" y1="40" x2="81" y2="33" stroke="#7aab8a" stroke-width="1.2" stroke-linecap="round"/>
+        <line x1="66" y1="50" x2="81" y2="50" stroke="#7aab8a" stroke-width="1.2" stroke-linecap="round"/>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <span class="footer-logo">Alby Greenwood</span>
+  <p>&copy; 2025 Alby Greenwood &middot; Children's Book Author &middot; Tasmania, Australia</p>
+</footer>
+
+<script>
+  // Nav scroll
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => nav.classList.toggle('scrolled', window.scrollY > 60));
+
+  // Fireflies
+  const fc = document.getElementById('fireflies');
+  for (let i = 0; i < 22; i++) {
+    const f = document.createElement('div');
+    f.className = 'firefly';
+    const s = 2 + Math.random() * 3;
+    f.style.cssText = 'left:' + (Math.random()*100) + '%;top:' + (18+Math.random()*68) + '%;width:' + s + 'px;height:' + s + 'px;--fx:' + ((Math.random()-.5)*140) + 'px;--fy:' + ((Math.random()-.5)*100) + 'px;animation-duration:' + (4+Math.random()*9) + 's;animation-delay:' + (Math.random()*7) + 's;';
+    fc.appendChild(f);
+  }
+
+  // Light rays
+  const rc = document.getElementById('rays');
+  for (let i = 0; i < 10; i++) {
+    const r = document.createElement('div');
+    r.className = 'ray';
+    r.style.cssText = 'left:' + (4+(i/10)*92) + '%;transform:rotate(' + (-28+(i/10)*56) + 'deg);animation-duration:' + (3+Math.random()*4) + 's;animation-delay:' + (Math.random()*3) + 's;width:' + (1+Math.random()*2.5) + 'px;';
+    rc.appendChild(r);
+  }
+
+  // Falling leaves
+  const lc = document.getElementById('leaves-container');
+  const leafColors = ['#4a7c5f','#2d5a3d','#7aab8a','#c8a84b','#3d6b4a','#1a3a2a'];
+  function createLeaf() {
+    const l = document.createElement('div');
+    l.className = 'falling-leaf';
+    const sz = 9 + Math.random() * 20;
+    const col = leafColors[Math.floor(Math.random() * leafColors.length)];
+    const drift = (Math.random() - .5) * 220;
+    const spin = (Math.random() - .5) * 760;
+    const veinColor = col === '#c8a84b' ? '#1a3a2a' : '#c8a84b';
+    l.innerHTML = '<svg width="' + sz + '" height="' + (sz*1.6) + '" viewBox="0 0 40 65" xmlns="http://www.w3.org/2000/svg"><path d="M20,2 Q38,15 35,38 Q32,58 20,63 Q8,58 5,38 Q2,15 20,2 Z" fill="' + col + '" opacity="0.7"/><line x1="20" y1="2" x2="20" y2="63" stroke="' + veinColor + '" stroke-width="0.8" opacity="0.35"/></svg>';
+    l.style.cssText = 'left:' + (Math.random()*106) + '%;top:-90px;--drift:' + drift + 'px;--spin:' + spin + 'deg;animation-duration:' + (9+Math.random()*15) + 's;animation-delay:' + (Math.random()*22) + 's;';
+    lc.appendChild(l);
+    setTimeout(function() { l.remove(); }, (25 + Math.random()*15) * 1000);
+  }
+  for (let i = 0; i < 20; i++) createLeaf();
+  setInterval(createLeaf, 2600);
+
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const obs = new IntersectionObserver(function(entries) {
+    entries.forEach(function(e) {
+      if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); }
+    });
+  }, {threshold: 0.1, rootMargin: '0px 0px -30px 0px'});
+  reveals.forEach(function(el) { obs.observe(el); });
+
+  // Bookshelf
+  var shelfBooks = [
+    {title:"Where the Wild Things Are", author:"Sendak", color:"#3d6741", h:132},
+    {title:"The Very Hungry Caterpillar", author:"Carle", color:"#5a8c3e", h:148},
+    {title:"Possum Magic", author:"Mem Fox", color:"#7a5f35", h:126},
+    {title:"The Snail and the Whale", author:"Donaldson", color:"#3d6b5a", h:142},
+    {title:"The Gruffalo", author:"Donaldson", color:"#524066", h:136},
+    {title:"Wombat Stew", author:"Vaughan", color:"#6b4a3d", h:128},
+    {title:"The Lorax", author:"Dr Seuss", color:"#4a6b3d", h:152},
+    {title:"Leaf", author:"S. Dieckmann", color:"#3d5a4a", h:138},
+    {title:"The Giving Tree", author:"Silverstein", color:"#506b3d", h:130},
+    {title:"Grandad's Island", author:"Earle", color:"#3d3d6b", h:144}
+  ];
+  var shelf = document.getElementById('shelf-books');
+  shelfBooks.forEach(function(b) {
+    var el = document.createElement('div');
+    el.className = 'shelf-book';
+    el.style.cssText = 'background:' + b.color + ';height:' + b.h + 'px;width:' + (38 + Math.random()*16) + 'px;box-shadow:inset -3px 0 8px rgba(0,0,0,0.25),2px 0 4px rgba(0,0,0,0.15);';
+    el.innerHTML = '<span class="shelf-book-title">' + b.title + '</span><span class="shelf-book-author">' + b.author + '</span>';
+    shelf.appendChild(el);
+  });
+</script>
+</body>
+</html>

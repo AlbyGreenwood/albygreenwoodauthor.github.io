@@ -38,7 +38,7 @@
     .light-rays { position:absolute; inset:0; pointer-events:none; overflow:hidden; }
     .ray { position:absolute; top:-10%; width:2px; height:130%; background:linear-gradient(to bottom,rgba(200,168,75,0.17) 0%,transparent 75%); transform-origin:top center; animation:rayPulse ease-in-out infinite alternate; }
     @keyframes rayPulse { from{opacity:0.3} to{opacity:0.85} }
-    .canopy-top { position:absolute; top:0; left:0; right:0; height:200px; pointer-events:none; overflow:hidden; }
+    .canopy-top { position:absolute; top:0; left:0; right:0; height:200px; pointer-events:none; overflow:hidden; z-index:-1; }
     .falling-leaf { position:fixed; pointer-events:none; z-index:5; animation:leafFall linear infinite; opacity:0; }
     @keyframes leafFall {
       0%   { transform:translateY(-80px) translateX(0) rotate(0deg); opacity:0; }
